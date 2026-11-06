@@ -1,0 +1,17 @@
+name: ci-gate
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "lint placeholder"
+  ci-gate:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [lint]
+    steps:
+      - run: |
+          if echo '${{ toJSON(needs) }}' | grep -Eq '"result": "(failure|cancelled)"'; then exit 1; fi
